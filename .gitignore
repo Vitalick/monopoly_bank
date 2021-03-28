@@ -1,0 +1,8 @@
+# Project exclude paths
+/node_modules/
+/src/interfaces.js
+/src/interfaces.js.map
+/src/script.js
+/src/script.js.map
+/venv/
+.idea

@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Монополия</title>
+    <style>
+        .d-none {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+<h1>Монополия</h1>
+<h2>Ваш ID: <span id="ws-id"></span></h2>
+<form action="" onsubmit="sendMessage(event)">
+    <input type="text" id="messageText" autocomplete="off"/>
+    <button>Send</button>
+</form>
+<ul id='messages'>
+</ul>
+<script>
+    var clientId = Date.now();
+    document.querySelector('#ws-id').textContent = clientId.toString();
+    var ws = new WebSocket("ws://localhost:8000/ws/" + clientId);
+    ws.onmessage = function (event) {
+        var messages = document.getElementById('messages');
+        var message = document.createElement('li');
+        var msgObj = JSON.parse(event.data);
+        var content = document.createTextNode(msgObj.msgType);
+        message.appendChild(content);
+        messages.appendChild(message);
+    };
+</script>
+</body>
+</html>
