@@ -74,7 +74,9 @@ class ConnectionManager:
         return True
 
     async def disconnect_from_room(self, client_id: ClientIdT):
-        await self.check_room(client_id)
+        res = self.client_room_check.get(client_id)
+        if res:
+            await self.check_room(client_id)
         if players := list(filter(lambda x: x.client_id == client_id and x.room_id, self.players)):
             player = players[0]
             room_id: int = player.room_id
@@ -84,7 +86,7 @@ class ConnectionManager:
             await self.send_all_without_room(self.available_rooms_msg)
             await self.send_room_updates(room_id)
             return room_id
-        return False
+        return res if res else False
 
     def players_in_room(self, room_id: RoomIdT = None):
         return list(filter(lambda x: x and (not room_id or x.room_id == room_id), self.players))
